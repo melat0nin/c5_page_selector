@@ -30,7 +30,6 @@ class PageSelectorAttributeTypeController extends DefaultAttributeTypeController
  
         $availablePages = $this->getAvailablePages();
         $this->set('availablePages', $availablePages);
- 
         $this->set('fieldPostName', $this->field('value'));
     }
  
@@ -111,7 +110,6 @@ class PageSelectorAttributeTypeController extends DefaultAttributeTypeController
      */
     public function searchForm($list) {
         $terms = $this->request('value');
-        $tbl = $this->attributeKey->getIndexedSearchTable();
  
         // If no options are set, return an unfiltered list of the site's pages,
         // otherwise build the DB search query, filter the site's pages by it
@@ -119,14 +117,17 @@ class PageSelectorAttributeTypeController extends DefaultAttributeTypeController
         if (!is_array($terms)) {
             return $list;
         } else {
+            $db = Loader::db();
+            $tbl = $this->attributeKey->getIndexedSearchTable();
+            $akHandle = $this->attributeKey->getAttributeKeyHandle();
+            $criteria = array();
             $searchString = "(";
             foreach ($terms as $term) {
-                $searchString .= $tbl . ".ak_" . $this->attributeKey->getAttributeKeyHandle() . " LIKE '%\n{$term}\n%' OR ";
+                $escapedTerm = $db->escape($term);
+                $criteria[] = "({$tbl}.ak_{$akHandle} LIKE '%\n{$escapedTerm}\n%')";
             }
-            $searchString = substr( $searchString, 0, (strlen($searchString)-4) );
-            $searchString .= ")";
-            $list->filter(false, $searchString);
-            //$list->debug();
+            $where = '(' . implode(' OR ', $criteria) . ')';
+            $list->filter(false, $where);
             return $list;
         }
     }
