@@ -66,16 +66,15 @@ class PageSelectorAttributeTypeController extends DefaultAttributeTypeController
      * Serialise selected page IDs and save to DB
      */
     public function saveForm($data){
-        $valueArray = $data['value'];
- 
-        // Using the manual serialization method rather than serialize() to
-        // make searching more straightforward
-        $valueString = implode("\n", $valueArray);
-        if (empty($valueString)) {
+        if (empty($data['value'])) {
             $this->saveValue('');
-        } else {
+	} else {
+            // Using the manual serialization method rather than serialize() to
+            // make searching more straightforward
+            $valueArray = $data['value'];
+            $valueString = implode("\n", $valueArray);
             $this->saveValue("\n{$valueString}\n");
-        }
+	}
     }
  
     /*
