@@ -1,5 +1,6 @@
 <?php defined('C5_EXECUTE') or die("Access Denied.");
 $form = Loader::helper('form');
+$th = Loader::helper('text');
  
 // Arrays of (1) possible pages, and (2) currently selected pages
 $options_array = array();
@@ -21,19 +22,18 @@ if (count($options) > 0) {
     // Loop through available options and output checkboxes, setting to checked where page IDs
     // match those in the array of selected page IDs
     foreach ($options as $key=>$option) {
-        $selected = '';
-        if ( in_array($key, $selected_ids)) $selected = ' checked';
+        $checked = in_array($key, $selected_ids) ? 'checked="checked"' : '';
     ?>
  
         <label class="checkbox inline">
-            <input type="checkbox" name="<?=$fieldPostName?>[]" value="<?=$key?>"<?=$selected?> />
-            <?=$option?>
+            <input type="checkbox" name="<?php echo $fieldPostName; ?>[]" value="<?php echo $key; ?>"<?php echo $selected; ?> />
+            <?php echo $th->entities($option); ?>
         </label>
  
 <?php }
     echo '</fieldset>';
 } else {
  
-    echo '<strong style="line-height:30px">No options have been defined yet.</strong>';
+    echo '<strong style="line-height:30px">There are no pages of this type to choose from.</strong>';
  
 }
