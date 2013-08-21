@@ -22,11 +22,11 @@ if (count($options) > 0) {
     // Loop through available options and output checkboxes, setting to checked where page IDs
     // match those in the array of selected page IDs
     foreach ($options as $key=>$option) {
-        $checked = in_array($key, $selected_ids) ? 'checked="checked"' : '';
+        $checked = in_array($key, $selected_ids) ? ' checked="checked"' : '';
     ?>
  
         <label class="checkbox inline">
-            <input type="checkbox" name="<?php echo $fieldPostName; ?>[]" value="<?php echo $key; ?>"<?php echo $selected; ?> />
+            <input type="checkbox" name="<?php echo $fieldPostName; ?>[]" value="<?php echo $key; ?>"<?php echo $checked; ?> />
             <?php echo $th->entities($option); ?>
         </label>
  
